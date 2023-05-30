@@ -42,5 +42,6 @@ export const CATEGORY = {
   한국: { func: krMovieData(API_KEY), title: '에서 인기있는' },
 };
 export const TMDB_IMG_URL = `https://image.tmdb.org/t/p`;
+export const TMDB_POSTER_URL = `${TMDB_IMG_URL}/original`;
 export const CAROUSEL_DELAY = 6000;
 export const TRANSITION_TIME = 500;
