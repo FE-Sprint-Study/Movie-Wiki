@@ -10,7 +10,7 @@ import MovieDetail from './Pages/MovieDetail';
 function App() {
   const id = useSelector(state => state.ID.id);
   return (
-    <div>
+    <>
       <BrowserRouter>
         <Navbar />
         <Routes>
@@ -20,7 +20,7 @@ function App() {
         </Routes>
       </BrowserRouter>
       {id && <MovieDetail />}
-    </div>
+    </>
   );
 }
 
