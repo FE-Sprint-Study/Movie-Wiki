@@ -7,11 +7,10 @@ function MovieOverViewVideo({ postURL, movieData, videoData }) {
 
   useEffect(() => {
     if (videoData.results.length) {
-      setVideoPath(
-        videoData.results.find(video => {
-          return video.site === 'YouTube';
-        }),
+      const youtubeVideo = videoData.results.find(
+        video => video.site === 'YouTube',
       );
+      setVideoPath(youtubeVideo);
     }
   }, []);
 
@@ -26,16 +25,9 @@ function MovieOverViewVideo({ postURL, movieData, videoData }) {
               {movieData.overview}
             </p>
             <ul>
-              {movieData.genres.map(genre => {
-                return (
-                  <MovieGenres
-                    className="lg: mb-2 px-[10px] py-[5px] text-xs lg:px-[20px]"
-                    key={genre.id}
-                  >
-                    {genre.name}
-                  </MovieGenres>
-                );
-              })}
+              {movieData.genres.map(genre => (
+                <MovieGenres key={genre.id}>{genre.name}</MovieGenres>
+              ))}
             </ul>
           </OverviewDiv>
           {videoPath && (
@@ -56,15 +48,12 @@ function MovieOverViewVideo({ postURL, movieData, videoData }) {
 }
 
 const MoviePoster = tw.img`
- w-42 h-72 border-[0.3px] border-slate-600
+w-42 h-72 border-[0.3px] border-slate-600
 `;
 
-const MovieGenres = styled.li`
-  display: inline-block;
-  list-style: none;
-  border: 1px solid white;
-  border-radius: 30px;
-  margin-right: 10px;
+const MovieGenres = tw.li`
+lg: mb-2 mr-[10px] inline-block list-none rounded-[30px]
+border border-white px-[10px] py-[5px] text-xs lg:px-[20px]
 `;
 
 const MovieInfoWrapper = tw.div`

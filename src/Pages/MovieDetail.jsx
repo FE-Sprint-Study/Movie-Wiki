@@ -13,15 +13,12 @@ import {
   movieDetailFetchedData,
   videoFetchedData,
 } from '../API/movie';
-import { API_KEY } from '../Assets/ConstantValue';
+import { API_KEY, TMDB_IMG_URL } from '../Assets/ConstantValue';
 import { movieIdActions } from '../Store/movieId-slice';
-import {
-  SET_BACKDROP,
-  SET_CREDIT,
-  SET_MOVIE,
-  SET_POSTER,
-  SET_VIDEO,
-} from '../Assets/ActionType';
+import MOVIE_DETAIL_ACTIONS from '../Assets/ActionType';
+
+const { SET_BACKDROP, SET_CREDIT, SET_MOVIE, SET_POSTER, SET_VIDEO } =
+  MOVIE_DETAIL_ACTIONS;
 
 const initialState = {
   backdropURL: './defaultBackdrop.png',
@@ -72,13 +69,13 @@ function ModalOverlay() {
       if (data.backdrop_path) {
         stateDispatch({
           type: SET_BACKDROP,
-          payload: `https://image.tmdb.org/t/p/w1280${data.backdrop_path}`,
+          payload: `${TMDB_IMG_URL}/w1280${data.backdrop_path}`,
         });
       }
       if (data.poster_path) {
         stateDispatch({
           type: SET_POSTER,
-          payload: `https://image.tmdb.org/t/p/w500${data.poster_path}`,
+          payload: `${TMDB_IMG_URL}/w500${data.poster_path}`,
         });
       }
     });
