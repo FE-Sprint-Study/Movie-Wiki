@@ -7,6 +7,7 @@ import {
   STORY_LENGTH_LIMIT,
   YEAR_LENGTH_LIMIT,
   STAR_POINT_INITIAL_NUMBER,
+  TMDB_POSTER_URL,
 } from '../Assets/ConstantValue';
 import { movieIdActions } from '../Store/movieId-slice';
 import useScrollLock from '../Hooks/useScrollLock';
@@ -17,7 +18,7 @@ function MovieCard({ movie }) {
   const { lockScroll } = useScrollLock();
   const { title, overview } = movie;
   const moviePoster = movie.poster_path
-    ? `https://image.tmdb.org/t/p/original/${movie.poster_path}`
+    ? TMDB_POSTER_URL + movie.poster_path
     : '/defaultPoster.png';
   const date = movie.release_date
     ? movie.release_date.slice(0, YEAR_LENGTH_LIMIT)
