@@ -57,3 +57,9 @@ export const krMovieData = API => {
     `https://api.themoviedb.org/3/movie/popular?api_key=${API}&region=KR&language=ko`,
   );
 };
+
+export const searchMovieData = (API, keyword) => {
+  return fetch(
+    `https://api.themoviedb.org/3/search/movie?api_key=${API}&language=ko&query=${keyword}`,
+  );
+};
