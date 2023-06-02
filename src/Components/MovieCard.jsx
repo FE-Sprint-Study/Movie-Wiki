@@ -8,24 +8,26 @@ import {
   YEAR_LENGTH_LIMIT,
   STAR_POINT_INITIAL_NUMBER,
   TMDB_POSTER_URL,
-} from '../Assets/ConstantValue';
-import { movieIdActions } from '../Store/movieId-slice';
-import useScrollLock from '../Hooks/useScrollLock';
+} from 'Assets/ConstantValue';
+import { movieIdActions } from 'Store/movieId-slice';
+import useScrollLock from 'Hooks/useScrollLock';
 
 function MovieCard({ movie }) {
   const dispatch = useDispatch();
   const [isMouseOn, setIsMouseOn] = useState(false);
   const { lockScroll } = useScrollLock();
-  const { title, overview } = movie;
-  const moviePoster = movie.poster_path
+
+  const MOVIE_POSTER = movie.poster_path
     ? TMDB_POSTER_URL + movie.poster_path
     : '/defaultPoster.png';
-  const date = movie.release_date
+  const DATE = movie.release_date
     ? movie.release_date.slice(0, YEAR_LENGTH_LIMIT)
     : 'xxxx';
-  const starPoint = movie.vote_average
+  const STAR_POINT = movie.vote_average
     ? movie.vote_average.toFixed(1)
     : STAR_POINT_INITIAL_NUMBER;
+
+  const { title, overview } = movie;
   const cardPosterClassName = isMouseOn && 'scale-105 brightness-40';
 
   const textLengthOverCut = (text, len) => {
@@ -42,17 +44,10 @@ function MovieCard({ movie }) {
     return text;
   };
 
-  const handleMouseEnter = () => {
-    setIsMouseOn(true);
-  };
-  const handleMouseLeave = () => {
-    setIsMouseOn(false);
-  };
-
   return (
     <Card
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={() => setIsMouseOn(true)}
+      onMouseLeave={() => setIsMouseOn(false)}
       onClick={() => {
         lockScroll();
         dispatch(movieIdActions.openModal(movie.id));
@@ -61,7 +56,7 @@ function MovieCard({ movie }) {
       <div className="relative h-52">
         <CardPoster
           className={`${cardPosterClassName}`}
-          src={moviePoster}
+          src={MOVIE_POSTER}
           alt="포스터"
         />
 
@@ -69,18 +64,18 @@ function MovieCard({ movie }) {
           {textLengthOverCut(overview, STORY_LENGTH_LIMIT)}
         </CardStory>
       </div>
-      <div className="flex h-12 flex-col bg-transparent">
-        <div className="text-white">
+      <section className="flex h-12 flex-col bg-transparent">
+        <header className="text-white">
           {textLengthOverCut(title, TEXT_LENGTH_LIMIT)}
-        </div>
+        </header>
         <div className="flex justify-between text-sm">
-          <div className="text-white">{date}</div>
+          <p className="text-white">{DATE}</p>
           <div className="mr-2 flex text-red-500">
             <IoStarSharp className="mr-1 mt-1" />
-            {starPoint}
+            {STAR_POINT}
           </div>
         </div>
-      </div>
+      </section>
     </Card>
   );
 }
@@ -105,7 +100,7 @@ const CardPoster = tw.img`
   backface-hidden
 `;
 
-const CardStory = tw.div`
+const CardStory = tw.p`
   absolute
   left-0
   top-0

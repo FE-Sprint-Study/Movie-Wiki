@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import tw from 'tailwind-styled-components';
 
-function Tag({ genre, clickTag, setClickTag }) {
+function Tag({ genre, tagList, setTagList }) {
   const [isToggle, setIsToggle] = useState(false);
 
   const handleTagToggle = () => {
@@ -10,10 +10,10 @@ function Tag({ genre, clickTag, setClickTag }) {
 
   useEffect(() => {
     if (isToggle) {
-      setClickTag([...clickTag, genre]);
+      setTagList([...tagList, genre]);
       return;
     }
-    setClickTag([...clickTag.filter(e => e.name !== genre.name)]);
+    setTagList([...tagList.filter(e => e.name !== genre.name)]);
   }, [isToggle]);
 
   return (
@@ -28,7 +28,7 @@ function Tag({ genre, clickTag, setClickTag }) {
   );
 }
 
-const StyledTag = tw.div`
+const StyledTag = tw.button`
   m-2
   flex
   w-20

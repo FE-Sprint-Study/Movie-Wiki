@@ -1,49 +1,47 @@
 import React, { useEffect, useRef, useState } from 'react';
 import tw from 'tailwind-styled-components';
-import { API_KEY, GENRE_LIST } from '../Assets/ConstantValue';
-import Tag from '../Components/Tag';
-import { movieGenreData } from '../API/movie';
-import MovieCard from '../Components/MovieCard';
-import useFetchMovie from '../Hooks/useFetchMovie';
-import useIntersectionObserver from '../Hooks/useIntersectionObserver';
-import TopButton from '../Components/TopButton';
-import EmptyMovie from '../Components/EmptyMovie';
+import { API_KEY, GENRE_LIST } from 'Assets/ConstantValue';
+import Tag from 'Components/Tag';
+import { movieGenreData } from 'API/movie';
+import MovieCard from 'Components/MovieCard';
+import useFetchMovie from 'Hooks/useFetchMovie';
+import useIntersectionObserver from 'Hooks/useIntersectionObserver';
+import TopButton from 'Components/TopButton';
+import EmptyMovie from 'Components/EmptyMovie';
 
 function Category() {
   const [genreList, setGenreList] = useState([]);
-  const [tagList, setTagList] = useState('');
-  const [clickTag, setClickTag] = useState([]);
+  const [tagName, setTagName] = useState('');
+  const [tagList, setTagList] = useState([]);
   const [pageNum, setPageNum] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-  const [end, setEnd] = useState(false);
-  const [canLoadMore, setCanLoadMore] = useState(true);
-  const [emptyData, setEmptyData] = useState(false);
+  const [isEnd, setIsEnd] = useState(false);
+  const [isLoadMore, setIsLoadMore] = useState(true);
+  const [isEmptyData, setIsEmptyData] = useState(false);
   const target = useRef(null);
   const isFirstRender = useRef(true);
   const { fetchData: fetchMovieData } = useFetchMovie();
-
-  const options = {
-    threshold: 1.0,
-  };
 
   const fetchMovies = async () => {
     fetchMovieData(
       movieGenreData(
         API_KEY,
-        clickTag.map(e => e.id),
+        tagList.map(e => e.id),
         pageNum,
       ),
       data => {
-        setEmptyData(false);
+        if (data.results.length > 0) {
+          setIsEmptyData(false);
+        }
         if (data.results.length === 0 && genreList.length === 0) {
-          setEmptyData(true);
+          setIsEmptyData(true);
           setIsLoading(false);
           return;
         }
         if (pageNum === 1) {
           setGenreList(data.results);
           setIsLoading(false);
-          setCanLoadMore(true);
+          setIsLoadMore(true);
           return;
         }
         if (data.results && data.results.length > 0) {
@@ -51,11 +49,11 @@ function Category() {
             newItem => !genreList.some(oldItem => oldItem.id === newItem.id),
           );
           setGenreList([...genreList, ...newData]);
-          setCanLoadMore(true);
+          setIsLoadMore(true);
           return;
         }
 
-        setEnd(true);
+        setIsEnd(true);
       },
     );
   };
@@ -67,9 +65,9 @@ function Category() {
           isFirstRender.current = false;
           return;
         }
-        if (canLoadMore) {
+        if (isLoadMore) {
           setPageNum(prev => prev + 1);
-          setCanLoadMore(false);
+          setIsLoadMore(false);
         }
       }
     });
@@ -77,62 +75,71 @@ function Category() {
 
   const handleTagChange = () => {
     setGenreList([]);
-    setTagList(() => {
-      return clickTag
+    setTagName(() => {
+      return tagList
         .reduce((acc, cur) => `${acc + cur.name},`, '')
         .slice(0, -1);
     });
   };
 
-  useEffect(() => {
+  const handleInitialValue = () => {
     isFirstRender.current = true;
-    handleTagChange();
-    setEnd(false);
-    setPageNum(1);
+    setIsEnd(false);
     if (pageNum === 1) {
       fetchMovies();
+      return;
     }
-  }, [clickTag]);
+    setPageNum(1);
+  };
+
+  useEffect(() => {
+    handleTagChange();
+    handleInitialValue();
+  }, [tagList]);
 
   useEffect(() => {
     setIsLoading(true);
-    setEnd(false);
+    setIsEnd(false);
     fetchMovies();
   }, [pageNum]);
+
+  const options = {
+    threshold: 1.0,
+  };
 
   useIntersectionObserver(onIntersection, options, target);
 
   return (
     <section id="category" className="ml-56">
       <TopButton />
-      <div className="m-5">
+      <article className="m-5">
         <TagContainer>
-          {GENRE_LIST.map(e => (
+          {GENRE_LIST.map(genre => (
             <Tag
-              genre={e}
-              clickTag={clickTag}
-              setClickTag={setClickTag}
-              key={e.id}
+              genre={genre}
+              tagList={tagList}
+              setTagList={setTagList}
+              key={genre.id}
             />
           ))}
         </TagContainer>
-      </div>
-      <div className="mt-10 text-3xl font-bold text-white">
-        {tagList || '태그를 클릭해주세요.'}
-      </div>
-      <div className="flex flex-wrap">
+      </article>
+      <p className="mt-10 text-3xl font-bold text-white">
+        {tagName || '태그를 클릭해주세요.'}
+      </p>
+      <section className="flex flex-wrap">
         {genreList && genreList.map(e => <MovieCard movie={e} key={e.id} />)}
-        {emptyData && <EmptyMovie message="Please change the tag." />}
-      </div>
+        {isEmptyData && <EmptyMovie message="Please change the tag." />}
+      </section>
       <div id="nextPage" ref={target} />
       {isLoading && (
-        <Loading className={`${end && 'hidden'}`}>로딩중...</Loading>
+        <Loading className={`${isEnd && 'hidden'}`}>로딩중...</Loading>
       )}
     </section>
   );
 }
 
-const TagContainer = tw.div`
+const TagContainer = tw.article`
   flex
   flex-wrap
   justify-start
