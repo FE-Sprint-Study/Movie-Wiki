@@ -21,7 +21,6 @@ function Tag({ genre, clickTag, setClickTag }) {
       role="checkbox"
       className={`${isToggle ? 'border-blueWhite bg-blueWhite' : ''}`}
       onClick={handleTagToggle}
-      onKeyPress={() => {}}
       tabIndex={0}
     >
       {genre.name}

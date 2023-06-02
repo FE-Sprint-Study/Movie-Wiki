@@ -1,9 +1,9 @@
 import {
-  dailypopularMovieData,
+  dailyPopularMovieData,
   krMovieData,
   nowPlayingMovieData,
   popularMovieData,
-  weeklypopularMovieData,
+  weeklyPopularMovieData,
 } from '../API/movie';
 
 export const STAR_POINT_INITIAL_NUMBER = 0.0;
@@ -36,11 +36,12 @@ export const MOVIE_LENGTH_LIMIT = 10;
 export const CAROUSEL_LENGTH_LIMIT = 5;
 export const CATEGORY = {
   'TOP 10': { func: popularMovieData(API_KEY), title: '인기' },
-  주간: { func: weeklypopularMovieData(API_KEY), title: '인기' },
-  일간: { func: dailypopularMovieData(API_KEY), title: '인기' },
+  주간: { func: weeklyPopularMovieData(API_KEY), title: '인기' },
+  일간: { func: dailyPopularMovieData(API_KEY), title: '인기' },
   '상영 중인': { func: nowPlayingMovieData(API_KEY), title: '' },
   한국: { func: krMovieData(API_KEY), title: '에서 인기있는' },
 };
-export const BACKDROP_IMG_URL = `https://image.tmdb.org/t/p/w1280`;
+export const TMDB_IMG_URL = `https://image.tmdb.org/t/p`;
+export const TMDB_POSTER_URL = `${TMDB_IMG_URL}/original`;
 export const CAROUSEL_DELAY = 6000;
 export const TRANSITION_TIME = 500;

@@ -4,6 +4,7 @@ import tw from 'tailwind-styled-components';
 import SearchInput from '../Components/search/SearchInput';
 import SearchResult from '../Components/search/SearchResult';
 import SearchSimilar from '../Components/search/SearchSimilar';
+import TopButton from '../Components/TopButton';
 import { searchMovieData } from '../API/movie';
 import { API_KEY } from '../Assets/ConstantValue';
 
@@ -50,6 +51,7 @@ function Search() {
   return (
     <SearchMain id="search">
       <SearchInput Handlerinput={Handlerinput} Handlersearch={Handlersearch} />
+      <TopButton />
       <section className="max-w-[900px]">
         {!data.length ? (
           <div className="text-3xl font-bold text-white">

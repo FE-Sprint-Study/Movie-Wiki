@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { css, styled } from 'styled-components';
 import 'animate.css';
 import {
-  BACKDROP_IMG_URL,
+  TMDB_IMG_URL,
   CAROUSEL_DELAY,
   CAROUSEL_LENGTH_LIMIT,
   CATEGORY,
@@ -12,7 +12,6 @@ import {
 function Carousel() {
   const [imgArr, setImgArr] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const imgRef = useRef();
   const savedCallback = useRef();
   const transitionStyle = `transform ${TRANSITION_TIME}ms ease 0s`;
   const [slideTransiton, setSlideTransiton] = useState(transitionStyle);
@@ -38,13 +37,13 @@ function Carousel() {
     }
   }, [currentIndex]);
 
-  const callback = () => {
+  const moveNextIndex = () => {
     setCurrentIndex((currentIndex + 1) % imgArr.length);
   };
 
   useEffect(() => {
-    savedCallback.current = callback;
-  });
+    savedCallback.current = moveNextIndex;
+  }, [moveNextIndex]);
 
   useEffect(() => {
     const fetch = async () => {
@@ -57,9 +56,10 @@ function Carousel() {
           ...movies,
           movies[0],
         ];
-        setImgArr(
-          infiniteMovie.map(movie => BACKDROP_IMG_URL + movie.backdrop_path),
+        const carouselImgArr = infiniteMovie.map(
+          movie => `${TMDB_IMG_URL}/w1280${movie.backdrop_path}`,
         );
+        setImgArr(carouselImgArr);
       }
     };
     fetch();
@@ -78,7 +78,7 @@ function Carousel() {
         currentindex={currentIndex}
         slidetransiton={slideTransiton}
       >
-        {imgArr && imgArr.map((el, idx) => <img ref={imgRef} src={el} />)}
+        {imgArr && imgArr.map(imgUrl => <img src={imgUrl} />)}
       </Slider>
     </div>
   );
@@ -93,4 +93,4 @@ const Slider = styled.div`
   `}
 `;
 
-export default Carousel;
+export default React.memo(Carousel);
