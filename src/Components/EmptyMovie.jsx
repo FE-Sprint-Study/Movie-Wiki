@@ -10,14 +10,14 @@ function EmptyMovie({ message }) {
           size="32"
           className="mr-2 items-center justify-center"
         />
-        <div className="text-3xl">Movie not found.</div>
+        <p className="text-3xl">Movie not found.</p>
       </EmptyMainMessage>
-      <div className="text-xl text-gray-300">{message}</div>
+      <p className="text-xl text-gray-300">{message}</p>
     </EmptyContainer>
   );
 }
 
-const EmptyContainer = tw.div`
+const EmptyContainer = tw.article`
   mt-28
   flex
   w-full
@@ -25,7 +25,7 @@ const EmptyContainer = tw.div`
   items-center
 `;
 
-const EmptyMainMessage = tw.div`
+const EmptyMainMessage = tw.section`
   flex
   items-center
   justify-around

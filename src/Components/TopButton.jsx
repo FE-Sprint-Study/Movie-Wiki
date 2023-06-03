@@ -1,6 +1,6 @@
 import React from 'react';
 import { AiOutlineUpCircle } from 'react-icons/ai';
-import throttle from '../utils/throttle';
+import throttle from 'utils/throttle';
 
 function TopButton() {
   const handleScrollUp = throttle(
