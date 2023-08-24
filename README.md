@@ -1,6 +1,6 @@
 <div align="center" >
   
-# Namu-Movie
+# Movie-Wiki
 </div>
 
 ### 개요
